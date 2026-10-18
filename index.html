@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trần Công Luận</title>
+  <script>
+    // Áp dụng chế độ đã lưu trước khi trang hiện ra, tránh bị chớp trắng.
+    try {
+      var saved = localStorage.getItem("theme");
+      if (saved === "dark" || saved === "light") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) {}
+  </script>
+  <style>
+    /* Màu chế độ sáng */
+    :root {
+      --nen: #f7f7f5;
+      --the: #ffffff;
+      --chu: #1f2328;
+      --chu-phu: #5b616b;
+      --nhan: #0b6bcb;
+      --vien: #e3e3df;
+      color-scheme: light;
+    }
+
+    /* Màu chế độ tối: theo thiết bị (khi chưa bấm nút) hoặc khi đã chọn tối */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --nen: #16181d;
+        --the: #1f2229;
+        --chu: #e6e8eb;
+        --chu-phu: #a1a7b0;
+        --nhan: #6cb4ff;
+        --vien: #30343c;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --nen: #16181d;
+      --the: #1f2229;
+      --chu: #e6e8eb;
+      --chu-phu: #a1a7b0;
+      --nhan: #6cb4ff;
+      --vien: #30343c;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 48px 16px;
+      background: var(--nen);
+      color: var(--chu);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      transition: background-color 0.25s, color 0.25s;
+    }
+
+    main { max-width: 640px; margin: 0 auto; }
+
+    header { margin-bottom: 32px; }
+    h1 { margin: 0 0 8px; font-size: 2rem; line-height: 1.2; }
+    .gioi-thieu { margin: 0; color: var(--chu-phu); font-size: 1.1rem; }
+
+    section {
+      background: var(--the);
+      border: 1px solid var(--vien);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      transition: background-color 0.25s, border-color 0.25s;
+    }
+    h2 { margin: 0 0 8px; font-size: 1.1rem; }
+    section p, section ul { margin: 0; }
+    ul { padding-left: 20px; }
+
+    a { color: var(--nhan); }
+
+    .chu-mau { color: var(--chu-phu); font-style: italic; }
+
+    #nut-che-do {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--vien);
+      border-radius: 50%;
+      background: var(--the);
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+    #nut-che-do:focus-visible { outline: 2px solid var(--nhan); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <button id="nut-che-do" type="button" aria-label="Chuyển chế độ sáng/tối"></button>
+
+  <main>
+    <header>
+      <h1>Trần Công Luận</h1>
+      <p class="gioi-thieu chu-mau">Một câu giới thiệu ngắn về bạn — hãy sửa lại dòng này.</p>
+    </header>
+
+    <section>
+      <h2>Đang học</h2>
+      <p>Tự học Claude Code (Tab Code) qua giáo trình này — Bài 1 đã xong, đang làm Bài 2.</p>
+    </section>
+
+    <section>
+      <h2>Sở thích &amp; kỹ năng</h2>
+      <ul class="chu-mau">
+        <li>Sở thích 1</li>
+        <li>Sở thích 2</li>
+        <li>Kỹ năng 1</li>
+        <li>Kỹ năng 2</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Liên hệ</h2>
+      <ul>
+        <li>GitHub: <a href="https://github.com/tcluanpy-maker">github.com/tcluanpy-maker</a></li>
+        <li>Email: <span class="chu-mau">[email của bạn]</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    var nut = document.getElementById("nut-che-do");
+    var root = document.documentElement;
+    var thietBiToi = window.matchMedia("(prefers-color-scheme: dark)");
+
+    function dangToi() {
+      var chon = root.getAttribute("data-theme");
+      return chon ? chon === "dark" : thietBiToi.matches;
+    }
+
+    function capNhatNut() {
+      var toi = dangToi();
+      nut.textContent = toi ? "☀️" : "🌙";
+      nut.title = toi ? "Chuyển sang chế độ sáng" : "Chuyển sang chế độ tối";
+    }
+
+    nut.addEventListener("click", function () {
+      var moi = dangToi() ? "light" : "dark";
+      root.setAttribute("data-theme", moi);
+      try { localStorage.setItem("theme", moi); } catch (e) {}
+      capNhatNut();
+    });
+
+    // Khi chưa bấm nút, đổi biểu tượng theo nếu thiết bị đổi sáng/tối.
+    thietBiToi.addEventListener("change", capNhatNut);
+    capNhatNut();
+  </script>
+</body>
+</html>
