@@ -10,7 +10,7 @@ def main():
     weekday = WEEKDAYS[now.weekday()]
     print(f"Xin chào, {NAME}! Chào mừng đến với Claude Code.")
     print(f"Hôm nay là {weekday}, ngày {now:%d/%m/%Y}, bây giờ là {now:%H:%M}.")
-    print(f"Chúc {NAME} một ngày tốt lành!")
+    print(f"Chúc {NAME} một ngày nhiều hạnh phúc!")
 
 
 if __name__ == "__main__":
