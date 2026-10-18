@@ -61,7 +61,8 @@
 
     main { max-width: 640px; margin: 0 auto; }
 
-    header { margin-bottom: 32px; }
+    /* Chừa chỗ bên phải cho nút chuyển chế độ để không che tên */
+    header { margin-bottom: 32px; padding-right: 56px; }
     h1 { margin: 0 0 8px; font-size: 2rem; line-height: 1.2; }
     .gioi-thieu { margin: 0; color: var(--chu-phu); font-size: 1.1rem; }
 
@@ -82,7 +83,7 @@
     .chu-mau { color: var(--chu-phu); font-style: italic; }
 
     #nut-che-do {
-      position: fixed;
+      position: absolute;
       top: 16px;
       right: 16px;
       width: 44px;
@@ -97,7 +98,8 @@
   </style>
 </head>
 <body>
-  <button id="nut-che-do" type="button" aria-label="Chuyển chế độ sáng/tối"></button>
+  <!-- Ẩn sẵn; JavaScript hiện nút sau khi gắn biểu tượng (không có JS thì nút cũng vô dụng) -->
+  <button id="nut-che-do" type="button" aria-label="Chế độ tối" aria-pressed="false" hidden></button>
 
   <main>
     <header>
@@ -143,6 +145,7 @@
       var toi = dangToi();
       nut.textContent = toi ? "☀️" : "🌙";
       nut.title = toi ? "Chuyển sang chế độ sáng" : "Chuyển sang chế độ tối";
+      nut.setAttribute("aria-pressed", toi ? "true" : "false");
     }
 
     nut.addEventListener("click", function () {
@@ -152,9 +155,16 @@
       capNhatNut();
     });
 
-    // Khi chưa bấm nút, đổi biểu tượng theo nếu thiết bị đổi sáng/tối.
-    thietBiToi.addEventListener("change", capNhatNut);
     capNhatNut();
+    nut.hidden = false;
+
+    // Khi chưa bấm nút, đổi biểu tượng theo nếu thiết bị đổi sáng/tối.
+    // Safari cũ (trước 14) chỉ có addListener.
+    if (thietBiToi.addEventListener) {
+      thietBiToi.addEventListener("change", capNhatNut);
+    } else if (thietBiToi.addListener) {
+      thietBiToi.addListener(capNhatNut);
+    }
   </script>
 </body>
 </html>
